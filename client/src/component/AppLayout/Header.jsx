@@ -1,5 +1,5 @@
 import { AppBar, Box, Stack, Tooltip, IconButton } from '@mui/material'
-import { Search, Add, Group, Logout , Notifications} from '@mui/icons-material';
+import { Search, Add, Group, Logout, Notifications } from '@mui/icons-material';
 import React from 'react'
 import Logo from '../../assets/Logo.png'
 
