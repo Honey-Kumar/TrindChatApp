@@ -4,11 +4,11 @@ import React from 'react'
 import moment from "moment"
 
 const Profile = () => {
-    const profile = "https://img.freepik.com/premium-vector/man-professional-business-casual-young-avatar-icon-illustration_1277826-628.jpg?size=626&ext=jpg&ga=GA1.1.2100509580.1727102882&semt=ais_hybrid"
+    const profile = import.meta.env.VITE_Profile
     return (
         <Box component={'div'} padding={4}>
             <Stack direction={'column'} alignItems={'center'} spacing={2}>
-                <Avatar alt="Remy Sharp" src={profile} sx={{ width: { sm: 80, md: 150, lg: 250, xl: 300 }, height: { sm: 80, md: 150, lg: 250, xl: 300 }, border: 6 }}
+                <Avatar alt="profile" src={profile} sx={{ width: { sm: 80, md: 150, lg: 250, xl: 300 }, height: { sm: 80, md: 150, lg: 250, xl: 300 }, border: 6 }}
                 />
                 <Box component={'div'}>
                     <Typography sx={{ fontSize: '1rem' }}>Student</Typography>

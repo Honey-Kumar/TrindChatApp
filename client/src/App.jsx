@@ -18,7 +18,7 @@ const App = () => {
           <Routes>
             <Route element={<ProtectedRoute user={user} />}>
               <Route path='/' element={<Home />} />
-              <Route path='/chat' element={<Chats />} />
+              <Route path='/chat/:id' element={<Chats />} />
               <Route path='/group' element={<Groups />} />
             </Route>
 

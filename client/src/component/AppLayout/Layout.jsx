@@ -25,13 +25,15 @@ const Layout = () => (WrappedComponent) => {
             <>
                 <PageTitle />
                 <Header />
-                <Box sx={{ flexGrow: 1, width: "100vw" }}>
+                <Box sx={{ flexGrow: 1, width: "100%" }}>
                     <Grid container sx={{ minHeight: '100vh' }}>
                         <Grid item sm={3} md={3}>
                             <Item sx={{ height: '100%', display: { xs: 'none', md: 'block', sm: 'block' } }}>First</Item>
                         </Grid>
                         <Grid item sm={6} xs={12} md={6}>
-                            <Item sx={{ height: '100%', display: { xs: 'block', md: 'block', sm: 'block' } }}>Second</Item>
+                            <Item sx={{ height: '100%', width: '100%', display: { xs: 'block', md: 'block', sm: 'block' } }}>
+                                <WrappedComponent {...props}/>
+                            </Item>
                         </Grid>
                         <Grid item sm={3} md={3}>
                             <Item sx={{ height: '100%', display: { xs: 'none', md: 'block', sm: 'block' }, bgcolor: '#1F55B3', color: 'white' }}>
