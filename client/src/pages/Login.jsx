@@ -12,6 +12,7 @@ import {
     Typography
 } from "@mui/material";
 import AuthLogo from '../assets/AuthLogo.png'
+import Logo from '../assets/Logo.png'
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import * as Yup from "yup";
 
@@ -52,11 +53,11 @@ const Login = () => {
     const SignupSchema = Yup.object().shape({
         name: Yup.string().required("Name is required"),
         username: Yup.string().required("Username is required"),
-        email: Yup.string()
+        SignupEmail: Yup.string()
             .email("Invalid email address format")
             .required("Email is required"),
         bio: Yup.string().required("Bio is required"),
-        password: Yup.string()
+        SignupPassword: Yup.string()
             .min(8, "Password must be 8 characters at minimum")
             .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
             .matches(/[a-z]/, "Password must contain at least one lowercase letter")
@@ -69,9 +70,23 @@ const Login = () => {
         <div
             style={{
                 minHeight: "100vh",
-                backgroundColor: 'rgb(251 146 60)'
+                backgroundColor: 'rgb(173, 216, 230)'
             }}
         >
+            <Box
+                sx={{
+                    width: '100%',
+                    padding: { xs: 2, md: 6 },
+                    display: 'block',
+                    margin: '0 auto'
+                }}
+            >
+                <img
+                    src={Logo}
+                    alt="Logo"
+                    style={{ maxWidth: '10%', height: '5%', margin: '0 auto', display: 'block' }}
+                />
+            </Box>
             <Container
                 component={"main"}
                 maxWidth="full"
@@ -161,9 +176,9 @@ const Login = () => {
                                 initialValues={{
                                     name: "",
                                     username: "",
-                                    email: "",
+                                    SignupEmail: "",
                                     bio: "",
-                                    password: "",
+                                    SignupPassword: "",
                                 }}
                                 validationSchema={SignupSchema}
                                 onSubmit={(values) => {
@@ -235,25 +250,25 @@ const Login = () => {
                                             helperText={touched.username && errors.username}
                                         />
                                         <Field
-                                            name="email"
+                                            name="SignupEmail"
                                             placeholder="Email"
                                             as={TextField}
                                             fullWidth
                                             margin="normal"
                                             variant="outlined"
-                                            error={touched.email && Boolean(errors.email)}
-                                            helperText={touched.email && errors.email}
+                                            error={touched.SignupEmail && Boolean(errors.SignupEmail)}
+                                            helperText={touched.SignupEmail && errors.SignupEmail}
                                         />
                                         <Field
-                                            name="password"
+                                            name="SignupPassword"
                                             type="password"
                                             placeholder="Password"
                                             as={TextField}
                                             fullWidth
                                             margin="normal"
                                             variant="outlined"
-                                            error={touched.password && Boolean(errors.password)}
-                                            helperText={touched.password && errors.password}
+                                            error={touched.SignupPassword && Boolean(errors.SignupPassword)}
+                                            helperText={touched.SignupPassword && errors.SignupPassword}
                                         />
                                         <Button
                                             sx={{ marginTop: "1rem" }}
@@ -292,7 +307,6 @@ const Login = () => {
                         style={{ maxWidth: '100%', height: 'auto', margin: '0 auto' }}
                     />
                 </Box>
-
             </Container>
         </div >
     );
