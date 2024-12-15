@@ -4,6 +4,7 @@ import React, { Suspense, useState } from 'react'
 import Logo from '../../assets/Logo.png'
 import NotificationDialog from "../specific/Notifications"
 import SearchDialog from "../specific/Search"
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [isSearch, setisSearch] = useState(false)
@@ -18,7 +19,7 @@ const Header = () => {
         <AppBar sx={{ positions: 'sticky', height: '5rem', bgcolor: 'rgb(251 146 60)' }}>
           <Stack direction={'row'}>
             <Box component={'div'} sx={{ padding: 1, marginLeft: 2 }}>
-              <img src={Logo} alt="Logo" height={"3.8%"} />
+              <Link to='/'><img src={Logo} alt="Logo" height={"3.8%"} /></Link>
             </Box>
             <Box sx={{ flexGrow: 1 }} />
             <Box component={'div'} sx={{ marginTop: '1rem' }}>

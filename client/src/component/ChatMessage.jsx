@@ -23,17 +23,17 @@ const ChatMessage = () => {
                     </Stack>
                     <Box component={'div'} flexGrow={1}></Box>
                     <Box component={'div'} sx={{ display: 'flex' }}>
-                        <Tooltip title={'Call'}>
+                        <Tooltip title={'Call Now'} sx={{ zIndex: 1 }}>
                             <IconButton size='large'>
                                 <Call fontSize='xl' />
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title={'VideoCall'}>
+                        <Tooltip title={'VideoCall'} sx={{ zIndex: 1 }}>
                             <IconButton size='large'>
                                 <VideoCall fontSize='xl' />
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title={'Menu'}>
+                        <Tooltip title={'Menu'} sx={{ zIndex: 1 }}>
                             <IconButton size='large'>
                                 <MoreVert fontSize='xl' />
                             </IconButton>

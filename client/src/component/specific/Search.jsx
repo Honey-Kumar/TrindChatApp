@@ -1,14 +1,18 @@
 import { Add, Close, SearchRounded } from '@mui/icons-material'
 import { Avatar, Box, Dialog, IconButton, Stack, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 
 const profile = import.meta.env.VITE_Profile
 
 
 const Search = () => {
+    const [showBar, setShowBar] = useState(true)
+    const handleShowBar = () => {
+        setShowBar(prev => !prev)
+    }
     return (
         <>
-            <Dialog open>
+            <Dialog open={showBar}>
                 <Stack component={'paper'} direction={'column'} sx={{
                     padding: 2,
                     position: 'relative'
@@ -22,11 +26,11 @@ const Search = () => {
                     </Box>
                     <Box component={'div'}>
                         {
-                            Array.from({ length: 100 }).map(i => <ProfileItem key={i} />)
+                            Array.from({ length: 100 }).map((i, id) => <ProfileItem key={id} />)
                         }
                     </Box>
                 </Stack>
-                <IconButton size='large' sx={{ position: 'absolute', top: 6, left: 6 }}>
+                <IconButton size='large' sx={{ position: 'absolute', top: 6, left: 6 }} onClick={handleShowBar}>
                     <Close fontSize='xl' />
                 </IconButton>
             </Dialog>

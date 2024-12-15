@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
+import { Link } from 'react-router-dom'
 import {
     Avatar,
     Box,
@@ -81,11 +82,13 @@ const Login = () => {
                     margin: '0 auto'
                 }}
             >
-                <img
-                    src={Logo}
-                    alt="Logo"
-                    style={{ maxWidth: '10%', height: '5%', margin: '0 auto', display: 'block' }}
-                />
+                <Link to='/'>
+                    <img
+                        src={Logo}
+                        alt="Logo"
+                        style={{ maxWidth: '10%', height: '5%', margin: '0 auto', display: 'block' }}
+                    />
+                </Link>
             </Box>
             <Container
                 component={"main"}

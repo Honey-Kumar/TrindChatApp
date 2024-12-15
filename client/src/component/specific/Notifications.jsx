@@ -1,13 +1,17 @@
 import { Add, Close, SearchRounded } from '@mui/icons-material'
 import { Avatar, Box, Button, Dialog, IconButton, Stack, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 
 const profile = import.meta.env.VITE_Profile
 
 const Notifications = () => {
+    const [showBar, setShowBar] = useState(true)
+    const handleShowBar = () => {
+        setShowBar(prev => !prev)
+    }
     return (
         <>
-            <Dialog open>
+            <Dialog open={showBar}>
                 <Stack component={'paper'} direction={'column'} sx={{
                     padding: 2,
                     position: 'relative'
@@ -15,11 +19,11 @@ const Notifications = () => {
                     <Typography sx={{ fontSize: '1rem', textAlign: 'center', fontWeight: 'bold' }}>Notifications</Typography>
                     <Box component={'div'} sx={{ marginTop: 2 }}>
                         {
-                            Array.from({ length: 10 }).map(i => <NotificationItem key={i} />)
+                            Array.from({ length: 10 }).map((i, id) => <NotificationItem key={id} />)
                         }
                     </Box>
                 </Stack>
-                <IconButton size='large' sx={{ position: 'absolute', top: 6, left: 6 }}>
+                <IconButton size='large' sx={{ position: 'absolute', top: 6, left: 6 }} onClick={handleShowBar}>
                     <Close fontSize='xl' />
                 </IconButton>
             </Dialog>
