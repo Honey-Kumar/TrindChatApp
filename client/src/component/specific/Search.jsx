@@ -3,6 +3,7 @@ import { Avatar, Box, Dialog, IconButton, Stack, Typography } from '@mui/materia
 import React, { useState } from 'react'
 
 const profile = import.meta.env.VITE_Profile
+console.log('profile : ', profile)
 
 
 const Search = () => {

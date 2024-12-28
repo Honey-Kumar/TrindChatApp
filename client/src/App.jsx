@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './component/Auth/ProtectedRoute'
 import { Suspense } from 'react'
 import Loading from './utils/Loading'
+import { ToastContainer } from 'react-toastify'
 
 const Home = lazy(() => import('./pages/Home'))
 const Chats = lazy(() => import('./pages/Chats'))
@@ -14,6 +15,7 @@ const App = () => {
   return (
     <>
       <Router>
+        <ToastContainer />
         <Suspense fallback={<Loading />}>
           <Routes>
             <Route element={<ProtectedRoute user={user} />}>

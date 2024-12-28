@@ -1,10 +1,11 @@
 import express from 'express'
-import { Cloudinaryapikey, Cloudinaryapisecret, Cloudinarycloudname, Port } from './config/config.js'
+import { Cloudinaryapikey, Cloudinaryapisecret, Cloudinarycloudname, FrontendOrigin, JWTKey, Port } from './config/config.js'
 import Userroute from './routes/user.js'
 import ConnectDB from './database/index.js'
 import cloudinary from 'cloudinary'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import { errorMiddleware } from './middleware/errorMiddleware.js'
 
 const app = express()
 app.use(express.json())
@@ -12,9 +13,10 @@ app.use(express.urlencoded({
     extended: true
 }))
 app.use(cors({
-    origin: '*'
+    origin: `${FrontendOrigin}`,
+    credentials: true
 }))
-app.use(cookieParser())
+app.use(cookieParser(JWTKey))
 app.use(Userroute)
 
 app.get('/', (req, res) => {
@@ -24,6 +26,7 @@ app.get('/', (req, res) => {
     })
 })
 
+app.use(errorMiddleware)
 ConnectDB()
 
 //configure cloudinary

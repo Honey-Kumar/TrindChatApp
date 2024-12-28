@@ -1,17 +1,36 @@
 import { AppBar, Box, Stack, Tooltip, IconButton, Backdrop } from '@mui/material'
-import { Search, Add, Group, Logout, Notifications } from '@mui/icons-material';
-import React, { Suspense, useState } from 'react'
+import { Search, Add, Group, Logout, Notifications, Login } from '@mui/icons-material';
+import React, { Suspense, useEffect, useState } from 'react'
 import Logo from '../../assets/Logo.png'
 import NotificationDialog from "../specific/Notifications"
 import SearchDialog from "../specific/Search"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import ConfirmBar from '../specific/ConfirmBar';
+import { useDispatch, useSelector } from 'react-redux';
+import { LogoutThunk } from '../../redux/Slices/AuthSlice';
+import { toast } from "react-toastify"
 
 const Header = () => {
+  const { User, isLoading, isError, Errormsg, isLoggedin, isLoggedout } = useSelector(state => state.Auth)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [isSearch, setisSearch] = useState(false)
   const handleisSearch = () => setisSearch(prev => !prev)
 
+  const [isConfirmed, setisConfirmed] = useState(false)
+  const handleisConfirmed = () => setisConfirmed(prev => !prev)
+
   const [isNotification, setisNotification] = useState(false)
   const handleisNotification = () => setisNotification(prev => !prev)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    if (isLoggedout) {
+      toast.success('Logout successfully')
+      navigate('/login')
+    }
+    return () => controller.abort()
+  }, [isLoggedout])
 
   return (
     <>
@@ -43,11 +62,21 @@ const Header = () => {
                   <Notifications sx={{ color: 'white' }} fontSize='xl' />
                 </IconButton>
               </Tooltip>
-              <Tooltip title={'Logout'}>
-                <IconButton size='large'>
-                  <Logout sx={{ color: 'white' }} fontSize='xl' />
-                </IconButton>
-              </Tooltip>
+              {
+                isLoggedin === true && isLoggedout === false ? <>
+                  <Tooltip title={'Logout'}>
+                    <IconButton size='large'>
+                      <Login sx={{ color: 'white' }} fontSize='xl' onClick={() => navigate('/login')} />
+                    </IconButton>
+                  </Tooltip>
+                </> : <>
+                  <Tooltip title={'Logout'}>
+                    <IconButton size='large'>
+                      <Logout sx={{ color: 'white' }} fontSize='xl' onClick={handleisConfirmed} />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              }
             </Box>
           </Stack>
         </AppBar>
@@ -66,6 +95,14 @@ const Header = () => {
         isNotification && (
           <Suspense fallback={<Backdrop open />}>
             <NotificationDialog />
+          </Suspense>
+        )
+      }
+
+      {
+        isConfirmed && (
+          <Suspense fallback={<Backdrop open />}>
+            <ConfirmBar message={'Are you sure you want to Logout?'} confirm={() => dispatch(LogoutThunk())} />
           </Suspense>
         )
       }

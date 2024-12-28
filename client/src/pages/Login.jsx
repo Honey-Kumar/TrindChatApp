@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
     Avatar,
     Box,
@@ -14,10 +14,16 @@ import {
 } from "@mui/material";
 import AuthLogo from '../assets/AuthLogo.png'
 import Logo from '../assets/Logo.png'
-import { Formik, Field, ErrorMessage, Form } from "formik";
+import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from 'react-redux';
+import { LoginThunk } from '../redux/Slices/AuthSlice';
+import { toast } from 'react-toastify'
 
 const Login = () => {
+    const { User, isLoading, isError, Errormsg, isLoggedin, isLoggedout } = useSelector(state => state.Auth)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [Authtab, setAuthtab] = useState(true);
     const [imagePreview, setImagePreview] = useState('');
 
@@ -30,9 +36,9 @@ const Login = () => {
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
-                setImagePreview(reader.result); // Set image preview
+                setImagePreview(reader.result);
             };
-            reader.readAsDataURL(file); // Convert image file to base64 URL
+            reader.readAsDataURL(file);
         }
     };
 
@@ -67,6 +73,15 @@ const Login = () => {
             .required("Password is required"),
     });
 
+    useEffect(() => {
+        const controller = new AbortController()
+        if (isLoggedin) {
+            navigate('/')
+            toast.success('Logged in Successfully')
+        }
+        return () => controller.abort()
+    }, [isLoggedin])
+
     return (
         <div
             style={{
@@ -77,7 +92,7 @@ const Login = () => {
             <Box
                 sx={{
                     width: '100%',
-                    padding: { xs: 2, md: 6 },
+                    padding: { xs: 1, md: 2 },
                     display: 'block',
                     margin: '0 auto'
                 }}
@@ -86,7 +101,7 @@ const Login = () => {
                     <img
                         src={Logo}
                         alt="Logo"
-                        style={{ maxWidth: '10%', height: '5%', margin: '0 auto', display: 'block' }}
+                        style={{ maxWidth: '10%', height: '3%', margin: '0 auto', display: 'block' }}
                     />
                 </Link>
             </Box>
@@ -98,7 +113,7 @@ const Login = () => {
                     flexDirection: { xs: 'column', md: 'row' },
                     justifyContent: "center",
                     alignItems: "center",
-                    padding: 5
+                    padding: 3
                 }}
             >
                 <Paper
@@ -124,8 +139,13 @@ const Login = () => {
                                     password: "",
                                 }}
                                 validationSchema={LoginSchema}
-                                onSubmit={(values) => {
+                                onSubmit={async (values) => {
                                     console.log(values);
+                                    const data = {
+                                        credential: values.email,
+                                        password: values.password
+                                    }
+                                    await dispatch(LoginThunk(data))
                                 }}
                             >
                                 {({ errors, touched }) => (
