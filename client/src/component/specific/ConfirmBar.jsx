@@ -1,13 +1,28 @@
 import { Add, Close, SearchRounded } from '@mui/icons-material'
 import { Avatar, Box, Button, Dialog, IconButton, Stack, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const profile = import.meta.env.VITE_Profile
 const ConfirmBar = ({ message, confirm }) => {
+    const navigate = useNavigate()
+    const { User, isLoading, isError, Errormsg, isLoggedin, isLoggedout } = useSelector(state => state.Auth)
     const [showVerify, setShowVerify] = useState(true)
     const handleshowVerify = () => {
         setShowVerify(prev => !prev)
     }
+
+    useEffect(() => {
+        const controller = new AbortController()
+        if (isLoggedout) {
+            toast.success('Logout successfully')
+            navigate('/login')
+        }
+        return () => controller.abort()
+    }, [isLoggedout])
+
     return (
         <>
             <Dialog open={showVerify}>

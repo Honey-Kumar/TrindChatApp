@@ -1,6 +1,6 @@
 import { AppBar, Box, Stack, Tooltip, IconButton, Backdrop } from '@mui/material'
-import { Search, Add, Group, Logout, Notifications, Login } from '@mui/icons-material';
-import React, { Suspense, useEffect, useState } from 'react'
+import { Search, Add, Group, Notifications, LoginOutlined, LogoutRounded } from '@mui/icons-material';
+import React, { Suspense, useState } from 'react'
 import Logo from '../../assets/Logo.png'
 import NotificationDialog from "../specific/Notifications"
 import SearchDialog from "../specific/Search"
@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 
 const Header = () => {
   const { User, isLoading, isError, Errormsg, isLoggedin, isLoggedout } = useSelector(state => state.Auth)
+  console.log('loggin : ', isLoggedin, " loggout : ", isLoggedout)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [isSearch, setisSearch] = useState(false)
@@ -22,15 +23,6 @@ const Header = () => {
 
   const [isNotification, setisNotification] = useState(false)
   const handleisNotification = () => setisNotification(prev => !prev)
-
-  useEffect(() => {
-    const controller = new AbortController()
-    if (isLoggedout) {
-      toast.success('Logout successfully')
-      navigate('/login')
-    }
-    return () => controller.abort()
-  }, [isLoggedout])
 
   return (
     <>
@@ -63,16 +55,16 @@ const Header = () => {
                 </IconButton>
               </Tooltip>
               {
-                isLoggedin === true && isLoggedout === false ? <>
-                  <Tooltip title={'Logout'}>
+                isLoggedin === false && isLoggedout === false ? <>
+                  <Tooltip title={'Login'}>
                     <IconButton size='large'>
-                      <Login sx={{ color: 'white' }} fontSize='xl' onClick={() => navigate('/login')} />
+                      <LoginOutlined sx={{ color: 'white' }} fontSize='xl' onClick={() => navigate('/login')} />
                     </IconButton>
                   </Tooltip>
                 </> : <>
                   <Tooltip title={'Logout'}>
                     <IconButton size='large'>
-                      <Logout sx={{ color: 'white' }} fontSize='xl' onClick={handleisConfirmed} />
+                      <LogoutRounded sx={{ color: 'white' }} fontSize='xl' onClick={() => handleisConfirmed()} />
                     </IconButton>
                   </Tooltip>
                 </>
