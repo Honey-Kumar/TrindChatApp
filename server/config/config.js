@@ -14,5 +14,6 @@ const SMPT_MAIL = process.env.SMPT_MAIL
 const SMPT_PASSWORD = process.env.SMPT_PASSWORD
 const LOGO = process.env.LOGO
 const FrontendOrigin = process.env.FrontendOrigin
+const NODE_ENV = process.env.NODE_ENV
 
-export { Port, DBUrl, Cloudinaryapikey, Cloudinaryapisecret, Cloudinarycloudname, JWTKey, SMPT_HOST, SMPT_MAIL, SMPT_PASSWORD, LOGO, FrontendOrigin }
+export { Port, DBUrl, Cloudinaryapikey, Cloudinaryapisecret, Cloudinarycloudname, JWTKey, SMPT_HOST, SMPT_MAIL, SMPT_PASSWORD, LOGO, FrontendOrigin, NODE_ENV }

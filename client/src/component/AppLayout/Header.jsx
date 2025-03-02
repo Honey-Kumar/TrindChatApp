@@ -9,8 +9,10 @@ import ConfirmBar from '../specific/ConfirmBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { LogoutThunk } from '../../redux/Slices/AuthSlice';
 import { toast } from "react-toastify"
+import Cookies from 'js-cookie'
 
 const Header = () => {
+  const token = Cookies.get("authtoken")
   const { User, isLoading, isError, Errormsg, isLoggedin, isLoggedout } = useSelector(state => state.Auth)
   console.log('loggin : ', isLoggedin, " loggout : ", isLoggedout)
   const dispatch = useDispatch()
@@ -55,7 +57,7 @@ const Header = () => {
                 </IconButton>
               </Tooltip>
               {
-                isLoggedin === false && isLoggedout === false ? <>
+                !token ? <>
                   <Tooltip title={'Login'}>
                     <IconButton size='large'>
                       <LoginOutlined sx={{ color: 'white' }} fontSize='xl' onClick={() => navigate('/login')} />

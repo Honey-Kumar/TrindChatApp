@@ -1,5 +1,6 @@
 import mongoose, { Schema, model } from 'mongoose'
 import bcrypt from 'bcrypt'
+import crypto from 'crypto'
 
 const UserSchema = new Schema({
     name: {
@@ -59,6 +60,12 @@ const UserSchema = new Schema({
     phone_otp_expiry: {
         type: Date,
         default: () => new Date(Date.now() + (5 * 60 * 60 * 1000))
+    },
+    reset_token: {
+        type: String
+    },
+    reset_token_expiry: {
+        type: Date
     }
 },
     { timestamps: true }
@@ -85,6 +92,20 @@ UserSchema.pre("save", async function (next) {
 //     }
 // }
 
+
+UserSchema.methods.resetToken = async function () {
+    try {
+        const token = crypto.randomBytes(20).toString("hex");
+        this.reset_token = crypto.createHash('sha256').update(token).digest("hex");
+        this.reset_token_expiry = Date.now() + 20 * 60 * 1000;
+
+        await this.save({ validateBeforeSave: false });
+
+        return token;
+    } catch (error) {
+        next(error)
+    }
+}
 
 const User = mongoose.models.User || model('User', UserSchema);
 

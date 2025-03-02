@@ -4,7 +4,7 @@ import { getBase64 } from '../lib/helper.js';
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { Errorhandler } from "./error.js"
-import { JWTKey, LOGO, SMPT_HOST, SMPT_MAIL, SMPT_PASSWORD } from "../config/config.js"
+import { JWTKey, LOGO, NODE_ENV, SMPT_HOST, SMPT_MAIL, SMPT_PASSWORD } from "../config/config.js"
 import { TryCatch } from '../middleware/errorMiddleware.js';
 import nodemailer from "nodemailer"
 
@@ -47,12 +47,13 @@ const sendToken = async (user, req, res, next, message, code) => {
         const token = await jwt.sign({ id: user._id }, JWTKey, { expiresIn: '1d' })
         console.log(token)
 
+        const isProduction = NODE_ENV === 'production';
         return res.status(code).cookie('token', token,
             {
                 httpOnly: true,
-                sameSite: 'none',
+                sameSite: 'lax',
                 // signed: true,
-                secure: true,
+                secure: isProduction,
                 maxAge: 24 * 60 * 60 * 1000,
             }
         ).json({
