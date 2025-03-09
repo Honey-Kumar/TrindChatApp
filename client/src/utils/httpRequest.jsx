@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import Cookies from "js-cookie";
 import axios from "axios";
 import { Base_url } from "../redux/RequestUrl";
 
@@ -10,7 +9,8 @@ export const httpRequest = async (
     queryParams = {},
     authentication = false,
     formData = false,
-    navigate
+    navigate,
+    token
 ) => {
     try {
         const baseUrl = Base_url
@@ -25,7 +25,7 @@ export const httpRequest = async (
         };
 
         if (authentication) {
-            const token = Cookies.get("authtoken");
+            console.log("my auth token : ", token)
             if (token) {
                 config.headers["Authorization"] = `Bearer ${token}`;
             } else {

@@ -13,7 +13,7 @@ Userroute.route('/editProfile').patch(authenticate, editProfile)
 Userroute.route('/deleteProfile').delete(authenticate, deleteProfile)
 Userroute.route('/forgetPassword').post(forgetPassword)
 Userroute.route('/resetPassword').post(resetPassword)
-Userroute.route('/getUsers').get(getAllUsers)
+Userroute.route('/getUsers').get(authenticate, getAllUsers)
 Userroute.route('/sendChatRequest').post(authenticate, sendChatRequest)
 Userroute.route('/getchatrequest').get(authenticate, getChatRequest)
 

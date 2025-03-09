@@ -235,7 +235,11 @@ const resetPassword = TryCatch(async (req, res, next) => {
 
 const getAllUsers = TryCatch(async (req, res, next) => {
     const { offset = 0, limit = 10, search } = req.query
-    let filter = {}
+    const myid = req.user
+    console.log("myid : ", myid)
+    let filter = {
+        _id: { $ne: new mongoose.Types.ObjectId(myid) }
+    }
     if (search) {
         filter['$or'] = [
             {
@@ -246,6 +250,7 @@ const getAllUsers = TryCatch(async (req, res, next) => {
             }
         ]
     }
+    console.log("filter : ", filter)
     const userdata = await User.aggregate(
         [
             {

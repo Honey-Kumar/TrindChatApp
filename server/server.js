@@ -12,11 +12,11 @@ app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
+app.use(cookieParser(JWTKey))
 app.use(cors({
     origin: `${FrontendOrigin}`,
     credentials: true
 }))
-app.use(cookieParser(JWTKey))
 app.use(Userroute)
 
 app.get('/', (req, res) => {

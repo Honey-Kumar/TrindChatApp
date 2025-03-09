@@ -146,8 +146,10 @@ const sendEmail = async (options) => {
 
 const authenticate = async (req, res, next) => {
     try {
-        const token = req.signedCookies.token || req.cookies.token
-        console.log('token : ', token)
+        // const token = (req.signedCookies.token || req.cookies.token) || (req.signedCookies.authtoken || req.cookies.authtoken)
+        console.log("All cookies:", req.cookies);
+        const token = req.cookies.token
+        console.log('backend-token : ', token)
 
         if (!token) {
             return next(new Errorhandler('Please login to access Trinder Chat app', 400))
