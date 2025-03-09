@@ -7,6 +7,10 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    bio: {
+        type: String,
+        default : ''
+    },
     email: {
         type: String,
         required: true,
@@ -79,18 +83,9 @@ UserSchema.pre("save", async function (next) {
         this.password = await bcrypt.hash(this.password, 10);
         next();
     } catch (error) {
-        next(error); // Pass any errors to the next middleware
+        next(error); 
     }
 })
-
-// UserSchema.methods.comparePassword = async function (password) {
-//     try {
-//         const result = await bcrypt.compare(password, this.password)
-//         return result
-//     } catch (error) {
-//         throw new Error('Password does not match')
-//     }
-// }
 
 
 UserSchema.methods.resetToken = async function () {

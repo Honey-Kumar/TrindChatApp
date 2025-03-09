@@ -4,7 +4,8 @@ const request = {
     logout: '/logout',
     register: '/register',
     forgetpassword: '/forgetPassword',
-    resetpassword: '/resetPassword'
+    resetpassword: '/resetPassword',
+    myprofile : '/me'
 }
 
 export { Base_url, request }

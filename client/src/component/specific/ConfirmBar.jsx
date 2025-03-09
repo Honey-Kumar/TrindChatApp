@@ -17,8 +17,8 @@ const ConfirmBar = ({ message, confirm }) => {
     useEffect(() => {
         const controller = new AbortController()
         if (isLoggedout) {
-            toast.success('Logout successfully')
             navigate('/login')
+            toast.success('Logout successfully')
         }
         return () => controller.abort()
     }, [isLoggedout])

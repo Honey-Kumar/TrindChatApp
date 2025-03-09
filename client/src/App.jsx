@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify'
 import Forgetpassword from './pages/Forgetpassword'
 import Resetpassword from './pages/Resetpassword'
 import Cookies from 'js-cookie'
+import { useSelector } from 'react-redux'
 
 const Home = lazy(() => import('./pages/Home'))
 const Chats = lazy(() => import('./pages/Chats'))
@@ -14,22 +15,28 @@ const Groups = lazy(() => import('./pages/Groups'))
 const Login = lazy(() => import('./pages/Login'))
 
 const App = () => {
-  let user = false
-  const tokenFromCookie = Cookies.get('authtoken')
-  console.log("auth token : ", tokenFromCookie)
-  if (tokenFromCookie) {
-    user = true
-  } else {
-    user = false
-  }
-  console.log("my user : ", user)
+  const { isLoggedin , isLoggedout} = useSelector(state => state.Auth)
+  const [istoken, setistoken] = useState(false)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const tokenFromCookie = Cookies.get('authtoken')
+    console.log("auth token : ", tokenFromCookie)
+    if (tokenFromCookie) {
+      setistoken(true)
+    } else {
+      setistoken(false)
+    }
+    console.log("istoken : ", istoken)
+    return () => controller.abort()
+  }, [isLoggedin, isLoggedout])
   return (
     <>
       <Router>
         <ToastContainer />
         <Suspense fallback={<Loading />}>
           <Routes>
-            <Route element={<ProtectedRoute user={user} />}>
+            <Route element={<ProtectedRoute user={istoken} />}>
               <Route path='/' element={<Home />} />
               <Route path='/chat/:id' element={<Chats />} />
               <Route path='/group' element={<Groups />} />
@@ -37,7 +44,7 @@ const App = () => {
 
             <Route
               path='/login'
-              element={user ? <Navigate to='/' /> : <Login />}
+              element={istoken ? <Navigate to='/' /> : <Login />}
             />
             <Route path='/forget' element={<Forgetpassword />} />
             <Route path='/resetpassword/:token' element={<Resetpassword />} />

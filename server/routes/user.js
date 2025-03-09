@@ -1,5 +1,5 @@
 import express from 'express'
-import { deleteProfile, editProfile, forgetPassword, login, logout, myProfile, register, resetPassword } from '../controller/user/user.js'
+import { deleteProfile, editProfile, forgetPassword, getAllUsers, getChatRequest, login, logout, myProfile, register, resetPassword, sendChatRequest } from '../controller/user/user.js'
 import { singleAvatar } from '../middleware/multer.js'
 import { authenticate } from '../utils/feature.js'
 
@@ -13,5 +13,8 @@ Userroute.route('/editProfile').patch(authenticate, editProfile)
 Userroute.route('/deleteProfile').delete(authenticate, deleteProfile)
 Userroute.route('/forgetPassword').post(forgetPassword)
 Userroute.route('/resetPassword').post(resetPassword)
+Userroute.route('/getUsers').get(getAllUsers)
+Userroute.route('/sendChatRequest').post(authenticate, sendChatRequest)
+Userroute.route('/getchatrequest').get(authenticate, getChatRequest)
 
 export default Userroute

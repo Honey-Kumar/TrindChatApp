@@ -1,6 +1,6 @@
 import { AppBar, Box, Stack, Tooltip, IconButton, Backdrop } from '@mui/material'
 import { Search, Add, Group, Notifications, LoginOutlined, LogoutRounded } from '@mui/icons-material';
-import React, { Suspense, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import Logo from '../../assets/Logo.png'
 import NotificationDialog from "../specific/Notifications"
 import SearchDialog from "../specific/Search"

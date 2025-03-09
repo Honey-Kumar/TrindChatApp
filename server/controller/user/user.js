@@ -5,6 +5,8 @@ import { Errorhandler } from '../../utils/error.js'
 import { TryCatch } from '../../middleware/errorMiddleware.js'
 import { FrontendOrigin } from '../../config/config.js'
 import crypto from "crypto"
+import chatRequest from '../../models/chatRequest.js'
+import mongoose from 'mongoose'
 
 async function generateOtp() {
     return await Math.floor(Math.random() * 1000000)
@@ -230,4 +232,135 @@ const resetPassword = TryCatch(async (req, res, next) => {
     })
 })
 
-export { login, register, logout, myProfile, editProfile, deleteProfile, forgetPassword, resetPassword }
+
+const getAllUsers = TryCatch(async (req, res, next) => {
+    const { offset = 0, limit = 10, search } = req.query
+    let filter = {}
+    if (search) {
+        filter['$or'] = [
+            {
+                name: { $regex: search, $options: "i" }
+            },
+            {
+                email: { $regex: search, $options: "i" }
+            }
+        ]
+    }
+    const userdata = await User.aggregate(
+        [
+            {
+                $match: filter
+            },
+            {
+                $lookup: {
+                    from: "chat_requests",
+                    localField: "_id",
+                    foreignField: "request_to_user",
+                    as: "request"
+                }
+            },
+            {
+                $unwind: {
+                    path: '$request',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    avatar: 1,
+                    name: 1,
+                    request: {
+                        status: 1
+                    }
+                }
+            },
+            {
+                $sort: {
+                    name: 1
+                }
+            },
+            {
+                $skip: Number(offset)
+            },
+            {
+                $limit: Number(limit)
+            }
+        ]
+    )
+    // console.log("userdata : ", userdata)
+    // if (!userdata || userdata.length === 0) {
+    //     return next(new Errorhandler('User not found', 403))
+    // }
+
+    return res.status(200).json({
+        message: "User data fetched successfully",
+        data: userdata,
+        code: 200
+    })
+
+})
+
+const sendChatRequest = TryCatch(async (req, res, next) => {
+    const { user_id } = req.body
+    const myid = req.user
+    console.log("myid : ", myid)
+    const isExisted = await chatRequest.findOne({
+        request_from_user: myid,
+        request_to_user: user_id
+    })
+    console.log(isExisted)
+    const newchatrequest = await chatRequest.create({
+        request_from_user: myid,
+        request_to_user: user_id
+    })
+    console.log("newchatrequest : ", newchatrequest)
+    return res.status(200).json({
+        message: "chat request sent successfully",
+        data: newchatrequest,
+        code: 200
+    })
+})
+
+const getChatRequest = TryCatch(async (req, res, next) => {
+    const myid = req.user
+    console.log("myid : ", myid)
+    const chatrequestdata = await chatRequest.aggregate(
+        [
+            {
+                $match: {
+                    request_to_user: new mongoose.Types.ObjectId(myid),
+                    status: { $ne: "accepted" }
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "request_from_user",
+                    foreignField: "_id",
+                    as: "request_user_data",
+                    pipeline: [
+                        {
+                            $project: {
+                                name: 1,
+                                avatar: 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $unwind: {
+                    path: "$request_user_data"
+                }
+            }
+        ]
+    )
+    console.log("chatrequestdata : ", chatrequestdata)
+    return res.status(200).json({
+        message: "chat request fetched successfully",
+        data: chatrequestdata,
+        code: 200
+    })
+})
+
+export { login, register, logout, myProfile, editProfile, deleteProfile, forgetPassword, resetPassword, getAllUsers, sendChatRequest, getChatRequest }
